@@ -2,7 +2,7 @@ import pandas as pd
 import random
 
 def get_best_outfit(model_id='41085800-02'):
-    df = pd.read_csv('../data/items_data.csv', index_col ="model")
+    df = pd.read_csv('../src/data_preprocessed/items_data.csv', index_col ="model")
 
     MIN_OUTPUT = 0.7
 
