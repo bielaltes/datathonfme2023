@@ -21,14 +21,14 @@ def get_best_outfit(model_id='41085800-02'):
 
     cat = df.loc[model_id].category
     selected = [
-        {"model": "", "max": 0},
-        {"model": "", "max": 0},
-        {"model": "", "max": 0},
-        {"model": "", "max": 0},
-        {"model": "", "max": 0},
-        {"model": "", "max": 0},
-        {"model": "", "max": 0},
-        {"model": "", "max": 0}
+        {"model": "", "max": 0}, #Tops
+        {"model": "", "max": 0}, #Bottoms
+        {"model": "", "max": 0}, #Footwear
+        {"model": "", "max": 0}, #Jewellery
+        {"model": "", "max": 0}, #Outerwear
+        {"model": "", "max": 0}, #Dresses, jumpsuits and Complete set
+        {"model": "", "max": 0}, #Bags
+        {"model": "", "max": 0}  #Hats, scarves and gloves
     ]
 
     selected[cat-1]['model'] = model_id
@@ -52,11 +52,12 @@ def get_best_outfit(model_id='41085800-02'):
     # Return 
 
     returned_items = []
-    for item in selected:
+    for idx, item in selected:
+        if (idx == 0 or idx == 1) and (selected[5] > ((selected[5] + selected[5])/2)):
+            continue
+        if idx == 5 and (selected[5] < ((selected[0] + selected[1])/2)):
+            continue
         if item['max'] > MIN_OUTPUT:
             returned_items.append(item['model'])
-
-    with open("shared_variable.txt", "w") as f: 
-        f.write(str(returned_items)) 
 
     return returned_items

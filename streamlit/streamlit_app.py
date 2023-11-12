@@ -87,6 +87,8 @@ Choose a product to generate a matching outfit:
 cols = st.columns([1, 1, 1])
 images_path = "../data/images/"
 image_ids = get_image_ids(images_path)
+# S'HA DE CANVIAR COM AGAFEM LES IMATGES
+# VOSALTRES POSEU IMATGES DE MODELS QUE 'NO EXISTEIXEN' FILLS DE PUTA
 outfit = []
 selected_image = None
 size = 12
