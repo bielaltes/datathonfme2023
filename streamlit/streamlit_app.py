@@ -33,7 +33,7 @@ def print_images_generated(
         i = n
         while i < size:
             with col:
-                st.image(images[i])
+                spt.image(images[i])
             i = i + 5
         n = n + 1
 
