@@ -52,11 +52,12 @@ def get_best_outfit(model_id='41085800-02'):
     # Return 
 
     returned_items = []
-    for idx, item in selected:
-        if (idx == 0 or idx == 1) and (selected[5] > ((selected[5] + selected[5])/2)):
+    for idx, item in enumerate(selected):
+        if (idx == 0 or idx == 1) and (selected[5]['max'] > ((selected[5]['max'] + selected[5]['max'])/2)):
             continue
-        if idx == 5 and (selected[5] < ((selected[0] + selected[1])/2)):
+        if idx == 5 and (selected[5]['max'] < ((selected[0]['max'] + selected[1]['max'])/2)):
             continue
+        print(item)
         if item['max'] > MIN_OUTPUT:
             returned_items.append(item['model'])
 

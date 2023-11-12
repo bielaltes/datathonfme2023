@@ -78,7 +78,7 @@ def generate(image_ids, index, start):
 
 
 """
-# Welcome to Mango!
+# Welcome to Minga!
 
 Choose a product to generate a matching outfit:
 """
