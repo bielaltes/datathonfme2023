@@ -1,18 +1,31 @@
 #!/bin/bash
 
-# Directorio que contiene los archivos
-directorio="./data/images/"
+# Set the paths
+images_folder="data/images"
+csv_file="src/data_preprocessed/items_data.csv"
 
-# Cambia al directorio especificado
-cd "$directorio" || exit
+# Check if the CSV file exists
+if [ ! -f "$csv_file" ]; then
+    echo "CSV file not found: $csv_file"
+    exit 1
+fi
 
-# Itera sobre todos los archivos en el directorio que coinciden con el patrón "*.jpg"
-for archivo in *.jpg; do
-    # Extrae la parte del nombre de archivo después del primer guión bajo
-    nuevo_nombre=$(echo "$archivo" | cut -d '_' -f 2-)
+# Create an array to store the valid image names from the CSV
+valid_images=()
 
-    # Renombra el archivo
-    mv "$archivo" "$nuevo_nombre"
+# Read the CSV file and populate the array
+while IFS=',' read -r model _; do
+    if [ -n "$model" ]; then
+        valid_images+=("${model}.jpg")
+    fi
+done < "$csv_file"
+
+# Remove images that are not in the CSV file
+for image_path in "$images_folder"/*.jpg; do
+    image_name=$(basename "$image_path")
+    
+    if ! [[ " ${valid_images[@]} " =~ " $image_name " ]]; then
+        echo "Removing $image_name"
+        rm "$image_path"
+    fi
 done
-
-echo "¡Renombrado completado!"

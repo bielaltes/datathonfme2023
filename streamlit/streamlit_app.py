@@ -1,17 +1,18 @@
-from collections import namedtuple
-import altair as alt
-import math
-import pandas as pd
 import streamlit as st
 from PIL import Image
 from PIL import ImageChops
+import pandas as pd
 import os
 from streamlit_image_select import image_select
 from main import get_best_outfit
+import random
+
 
 @st.cache_data
 def get_image_ids(images_path):
-    return os.listdir(f"{images_path}")
+    image_ids = os.listdir(f"{images_path}")
+    random.shuffle(image_ids)
+    return image_ids
 
 
 def get_images(image_ids):
@@ -57,14 +58,14 @@ def getIndex(images_shown, selected_image):
 
 
 def convert_name(selected_name):
-    converted_name = selected_name[0:11].replace("_", "-")
+    converted_name = selected_name[0:11]
     return converted_name
 
 
 def deconvert_name(outfit):
     outfit_converted = []
     for product_id in outfit:
-        outfit_converted.append(product_id.replace("-", "_") + ".jpg")
+        outfit_converted.append(product_id + ".jpg")
     return outfit_converted
 
 
@@ -87,8 +88,6 @@ Choose a product to generate a matching outfit:
 cols = st.columns([1, 1, 1])
 images_path = "../data/images/"
 image_ids = get_image_ids(images_path)
-# S'HA DE CANVIAR COM AGAFEM LES IMATGES
-# VOSALTRES POSEU IMATGES DE MODELS QUE 'NO EXISTEIXEN' FILLS DE PUTA
 outfit = []
 selected_image = None
 size = 12
@@ -103,6 +102,14 @@ if "show_outfit" not in st.session_state.keys() or not st.session_state["show_ou
     images_shown = get_images(image_ids[start : (start + size) : 1])
     selected_image = print_images(images_shown)
 
+    if st.button(
+        "Next Page ->",
+        key="NextPage",
+        type="primary",
+    ):
+        st.session_state["start"] = start + size
+        st.rerun()
+
     if start > 0:
         if st.button(
             "<- Previous Page",
@@ -112,14 +119,6 @@ if "show_outfit" not in st.session_state.keys() or not st.session_state["show_ou
             st.session_state["start"] = start - size
             st.rerun()
 
-    if st.button(
-        "Next Page ->",
-        key="NextPage",
-        type="primary",
-    ):
-        st.session_state["start"] = start + size
-        st.rerun()
-    
     if st.button(
         "Generate Outfit",
         key="Generate",
