@@ -7,7 +7,7 @@ from PIL import Image
 from PIL import ImageChops
 import os
 from streamlit_image_select import image_select
-
+from main import get_best_outfit
 
 @st.cache_data
 def get_image_ids(images_path):
@@ -70,22 +70,25 @@ def deconvert_name(outfit):
 
 def generate(image_ids, index, start):
     image_converted = convert_name(image_ids[index + start])
-    # outfit = endpoint(image_converted)
-    # return deconvert_name(outfit)
-    # st.write(deconvert_name([image_converted]))
-    return deconvert_name([image_converted])
+    print(image_converted)
+    outfit = get_best_outfit(image_converted)
+    print(outfit)
+    st.write(deconvert_name([image_converted]))
+    return deconvert_name(outfit)
 
 
 """
-# Welcome to Mango!
+# Welcome to Minga!
 
-Choosse a product to generate an outfit:
+Choose a product to generate a matching outfit:
 """
 
 
 cols = st.columns([1, 1, 1])
 images_path = "../data/images/"
 image_ids = get_image_ids(images_path)
+# S'HA DE CANVIAR COM AGAFEM LES IMATGES
+# VOSALTRES POSEU IMATGES DE MODELS QUE 'NO EXISTEIXEN' FILLS DE PUTA
 outfit = []
 selected_image = None
 size = 12
@@ -100,6 +103,15 @@ if "show_outfit" not in st.session_state.keys() or not st.session_state["show_ou
     images_shown = get_images(image_ids[start : (start + size) : 1])
     selected_image = print_images(images_shown)
 
+    if start > 0:
+        if st.button(
+            "<- Previous Page",
+            key="PreviousPage",
+            type="primary",
+        ):
+            st.session_state["start"] = start - size
+            st.rerun()
+
     if st.button(
         "Next Page ->",
         key="NextPage",
@@ -107,10 +119,12 @@ if "show_outfit" not in st.session_state.keys() or not st.session_state["show_ou
     ):
         st.session_state["start"] = start + size
         st.rerun()
+    
     if st.button(
         "Generate Outfit",
         key="Generate",
         type="primary",
+        use_container_width=True,
     ):
         i = getIndex(images_shown, selected_image)
         st.session_state["outfit"] = generate(image_ids, i, start)
