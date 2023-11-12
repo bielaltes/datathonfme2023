@@ -79,7 +79,7 @@ def generate(image_ids, index, start):
 """
 # Welcome to Mango!
 
-Choosse a product to generate an outfit:
+Choose a product to generate a matching outfit:
 """
 
 
@@ -100,6 +100,15 @@ if "show_outfit" not in st.session_state.keys() or not st.session_state["show_ou
     images_shown = get_images(image_ids[start : (start + size) : 1])
     selected_image = print_images(images_shown)
 
+    if start > 0:
+        if st.button(
+            "<- Previous Page",
+            key="PreviousPage",
+            type="primary",
+        ):
+            st.session_state["start"] = start - size
+            st.rerun()
+
     if st.button(
         "Next Page ->",
         key="NextPage",
@@ -107,6 +116,7 @@ if "show_outfit" not in st.session_state.keys() or not st.session_state["show_ou
     ):
         st.session_state["start"] = start + size
         st.rerun()
+    
     if st.button(
         "Generate Outfit",
         key="Generate",
