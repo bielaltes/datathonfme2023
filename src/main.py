@@ -45,7 +45,6 @@ for index, row in df.iterrows():
     if (row_cat != cat):
         # tirar al TF
         result = random.uniform(0.0, 1.0)
-        print(row_cat)
         if (result > selected[row_cat-1]['max']):
             selected[row_cat-1]['max'] = result
             selected[row_cat-1]['model'] = row.name
