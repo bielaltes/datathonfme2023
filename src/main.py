@@ -1,7 +1,8 @@
 import pandas as pd
+import random
 
-model_id = ''
-df = pd.read_csv('items_data.csv')
+model_id = '41085800-02'
+df = pd.read_csv('../data/items_data.csv', index_col ="model")
 
 MIN_OUTPUT = 0.7
 
@@ -18,7 +19,8 @@ MIN_OUTPUT = 0.7
 } """
 
 
-cat = df.iloc['model' == model_id]['category']
+cat = df.loc[model_id].category
+print(df)
 selected = [
     {"model": "", "max": 0},
     {"model": "", "max": 0},
@@ -42,10 +44,11 @@ for index, row in df.iterrows():
 
     if (row_cat != cat):
         # tirar al TF
-        result = bimbimbambam
-        if (result > selected[row_cat]['max']):
-            selected[row_cat]['max'] = result
-            selected[row_cat]['model'] = row['model']
+        result = random.uniform(0.0, 1.0)
+        print(row_cat)
+        if (result > selected[row_cat-1]['max']):
+            selected[row_cat-1]['max'] = result
+            selected[row_cat-1]['model'] = row.name
 
 # Return 
 
@@ -54,4 +57,5 @@ for item in selected:
     if item['max'] > MIN_OUTPUT:
         returned_items.append(item['model'])
 
-return returned_items
+with open("shared_variable.txt", "w") as f: 
+    f.write(str(returned_items)) 
