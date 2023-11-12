@@ -7,7 +7,7 @@ from PIL import Image
 from PIL import ImageChops
 import os
 from streamlit_image_select import image_select
-
+from main import get_best_outfit
 
 @st.cache_data
 def get_image_ids(images_path):
@@ -70,10 +70,11 @@ def deconvert_name(outfit):
 
 def generate(image_ids, index, start):
     image_converted = convert_name(image_ids[index + start])
-    # outfit = endpoint(image_converted)
-    # return deconvert_name(outfit)
-    # st.write(deconvert_name([image_converted]))
-    return deconvert_name([image_converted])
+    print(image_converted)
+    outfit = get_best_outfit(image_converted)
+    print(outfit)
+    st.write(deconvert_name([image_converted]))
+    return deconvert_name(outfit)
 
 
 """
@@ -121,6 +122,7 @@ if "show_outfit" not in st.session_state.keys() or not st.session_state["show_ou
         "Generate Outfit",
         key="Generate",
         type="primary",
+        use_container_width=True,
     ):
         i = getIndex(images_shown, selected_image)
         st.session_state["outfit"] = generate(image_ids, i, start)
